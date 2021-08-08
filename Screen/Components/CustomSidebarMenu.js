@@ -3,7 +3,7 @@
 
 // Import React and Component
 import React from 'react';
-import {View, Text, Alert, StyleSheet} from 'react-native';
+import {View, Text, Alert, StyleSheet,Image} from 'react-native';
 
 import {
   DrawerContentScrollView,
@@ -11,25 +11,33 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
 
 const CustomSidebarMenu = (props) => {
   return (
     <View style={stylesSidebar.sideMenuContainer}>
       <View style={stylesSidebar.profileHeader}>
         <View style={stylesSidebar.profileHeaderPicCircle}>
-          <Text style={{fontSize: 25, color: '#307ecc'}}>
-            {'About React'.charAt(0)}
-          </Text>
+          <Image
+           source={require('../../assets/img/logo.png')}
+           style={{
+             width: '100%',
+             height: 300,
+             resizeMode: 'contain',
+             margin: 30,
+           }}
+          />
         </View>
-        <Text style={stylesSidebar.profileHeaderText}>AboutReact</Text>
+        <Text style={stylesSidebar.profileHeaderText}>Speedy foodies</Text>
       </View>
       <View style={stylesSidebar.profileHeaderLine} />
 
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
         <DrawerItem
-          label={({color}) => <Text style={{color: '#d8d8d8'}}>Logout</Text>}
+          label={({color}) => <Text style={{color: 'red'}}>Logout</Text>}
           onPress={() => {
             props.navigation.toggleDrawer();
             Alert.alert(
@@ -65,28 +73,29 @@ const stylesSidebar = StyleSheet.create({
   sideMenuContainer: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#307ecc',
+    backgroundColor: '#EEB76B',
     paddingTop: 40,
     color: 'white',
   },
   profileHeader: {
     flexDirection: 'row',
-    backgroundColor: '#307ecc',
+    backgroundColor: '#FCECDD',
     padding: 15,
     textAlign: 'center',
+    
   },
   profileHeaderPicCircle: {
     width: 60,
     height: 60,
     borderRadius: 60 / 2,
     color: 'white',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FCECDD',
     textAlign: 'center',
     justifyContent: 'center',
     alignItems: 'center',
   },
   profileHeaderText: {
-    color: 'white',
+    color: '#C9B6E4',
     alignSelf: 'center',
     paddingHorizontal: 10,
     fontWeight: 'bold',

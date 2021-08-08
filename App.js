@@ -14,6 +14,7 @@ import SplashScreen from './Screen/SplashScreen';
 import LoginScreen from './Screen/LoginScreen';
 import RegisterScreen from './Screen/RegisterScreen';
 import DrawerNavigationRoutes from './Screen/DrawerNavigationRoutes';
+import DrawerNavigatorRestaurantsRoutes from './Screen/DrawerNavigatorRestaurantsRoutes'
 
 const Stack = createStackNavigator();
 
@@ -32,7 +33,7 @@ const Auth = () => {
         options={{
           title: 'Register', //Set Header Title
           headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
+            backgroundColor: '#C9B6E4', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -67,6 +68,12 @@ const App = () => {
         <Stack.Screen
           name="DrawerNavigationRoutes"
           component={DrawerNavigationRoutes}
+          // Hiding header for Navigation Drawer as we will use our custom header
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DrawerNavigatorRestaurantsRoutes"
+          component={DrawerNavigatorRestaurantsRoutes}
           // Hiding header for Navigation Drawer as we will use our custom header
           options={{headerShown: false}}
         />

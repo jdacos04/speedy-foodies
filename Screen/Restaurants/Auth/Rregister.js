@@ -15,12 +15,11 @@ import {
   ScrollView,
 } from 'react-native';
 
-import Loader from './Components/Loader';
 
-const RegisterScreen = (props) => {
+
+const Rregister = (props) => {
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [userAge, setUserAge] = useState('');
   const [userAddress, setUserAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [errortext, setErrortext] = useState('');
@@ -41,10 +40,6 @@ const RegisterScreen = (props) => {
       alert('Please fill Email');
       return;
     }
-    if (!userAge) {
-      alert('Please fill Age');
-      return;
-    }
     if (!userAddress) {
       alert('Please fill Address');
       return;
@@ -54,7 +49,6 @@ const RegisterScreen = (props) => {
     var dataToSend = {
       name: userName,
       email: userEmail,
-      age: userAge,
       password: userAddress,
     };
     var formBody = [];
@@ -65,7 +59,7 @@ const RegisterScreen = (props) => {
     }
     formBody = formBody.join('&');
 
-    fetch('https://api-berserk.herokuapp.com/signup', {
+    fetch('http://192.168.1.108:4000/negocio/signup', {
       method: 'POST',
       body: formBody,
       headers: {
@@ -100,15 +94,12 @@ const RegisterScreen = (props) => {
           backgroundColor: '#FCECDD',
           justifyContent: 'center',
         }}>
-        <Image
-          source={require('../assets/img/success.png')}
-          style={{height: 150, resizeMode: 'contain', alignSelf: 'center'}}
-        />
+       
         <Text style={styles.successTextStyle}>Registration Successful.</Text>
         <TouchableOpacity
           style={styles.buttonStyle}
           activeOpacity={0.5}
-          onPress={() => props.navigation.navigate('LoginScreen')}>
+          onPress={() => props.navigation.navigate('Inicia sesion en tu negocio')}>
           <Text style={styles.buttonTextStyle}>Login Now</Text>
         </TouchableOpacity>
       </View>
@@ -116,7 +107,7 @@ const RegisterScreen = (props) => {
   }
   return (
     <View style={{flex: 1, backgroundColor: '#FCECDD'}}>
-      <Loader loading={loading} />
+      
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -124,15 +115,7 @@ const RegisterScreen = (props) => {
           alignContent: 'center',
         }}>
         <View style={{alignItems: 'center'}}>
-          <Image
-            source={require('../assets/img/logo.png')}
-            style={{
-              width: '100%',
-              height: 100,
-              resizeMode: 'contain',
-              margin: 30,
-            }}
-          />
+        
         </View>
         <KeyboardAvoidingView enabled>
           <View style={styles.SectionStyle}>
@@ -140,7 +123,7 @@ const RegisterScreen = (props) => {
               style={styles.inputStyle}
               onChangeText={(UserName) => setUserName(UserName)}
               underlineColorAndroid="#f000"
-              placeholder="Enter Name"
+              placeholder="nombre del local"
               placeholderTextColor="#8b9cb5"
               autoCapitalize="sentences"
               returnKeyType="next"
@@ -155,7 +138,7 @@ const RegisterScreen = (props) => {
               style={styles.inputStyle}
               onChangeText={(UserEmail) => setUserEmail(UserEmail)}
               underlineColorAndroid="#f000"
-              placeholder="Enter Email"
+              placeholder="Enter Email, usar el mismos de tu cuenta  "
               placeholderTextColor="#8b9cb5"
               keyboardType="email-address"
               ref={emailInputRef}
@@ -166,22 +149,8 @@ const RegisterScreen = (props) => {
               blurOnSubmit={false}
             />
           </View>
-          <View style={styles.SectionStyle}>
-            <TextInput
-              style={styles.inputStyle}
-              onChangeText={(UserAge) => setUserAge(UserAge)}
-              underlineColorAndroid="#f000"
-              placeholder="Enter Age"
-              placeholderTextColor="#8b9cb5"
-              keyboardType="numeric"
-              ref={ageInputRef}
-              returnKeyType="next"
-              onSubmitEditing={() =>
-                addressInputRef.current && addressInputRef.current.focus()
-              }
-              blurOnSubmit={false}
-            />
-          </View>
+      
+          
           <View style={styles.SectionStyle}>
             <TextInput
               style={styles.inputStyle}
@@ -210,7 +179,7 @@ const RegisterScreen = (props) => {
     </View>
   );
 };
-export default RegisterScreen;
+export default Rregister;
 
 const styles = StyleSheet.create({
   SectionStyle: {
@@ -222,7 +191,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: '#C9B6E4',
+    backgroundColor: '#EEB76B',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',

@@ -17,9 +17,9 @@ import {
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import Loader from './Components/Loader';
 
-const LoginScreen = ({navigation}) => {
+
+const Rlogin = ({navigation}) => {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,7 +27,7 @@ const LoginScreen = ({navigation}) => {
 
   const passwordInputRef = createRef();
 
-  const handleSubmitPress =  () => {
+  const handleSubmitPress = () => {
     setErrortext('');
     if (!userEmail) {
       alert('Please fill Email');
@@ -47,7 +47,7 @@ const LoginScreen = ({navigation}) => {
     }
     formBody = formBody.join('&');
 
-    fetch('https://api-berserk.herokuapp.com/signin',{
+    fetch('http://192.168.1.108:4000/signin', {
       method: 'POST',
       body: formBody,
       headers: {
@@ -56,19 +56,16 @@ const LoginScreen = ({navigation}) => {
       },
     })
       .then((response) => response.json())
-      .then( async(responseJson)  => {
+      .then((responseJson) => {
         //Hide Loader
         setLoading(false);
         console.log(responseJson);
         // If server response message same as Data Matched
         if (responseJson.status == "SUCCESS") {
           const i=toString(responseJson.data)
-          await AsyncStorage.setItem('user_id',i)
-          const u = await AsyncStorage.getItem('user_id')
-          console.log(parseInt(u))
+          AsyncStorage.setItem('local_id', i);
           console.log(responseJson.data);
-           const cosa = responseJson.data
-          navigation.replace('DrawerNavigationRoutes');
+          navigation.replace('DrawerNavigatorRestaurantsRoutes');
         } else {
           setErrortext('Please check your email id or password');
           console.log('Please check your email id or password');
@@ -79,12 +76,10 @@ const LoginScreen = ({navigation}) => {
         setLoading(false);
         console.error(error);
       });
-
   };
 
   return (
     <View style={styles.mainBody}>
-      <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={{
@@ -95,15 +90,15 @@ const LoginScreen = ({navigation}) => {
         <View>
           <KeyboardAvoidingView enabled>
             <View style={{alignItems: 'center'}}>
-              <Image
-                source={require('../assets/img/logo.png')}
+              {/* <Image
+                source={require('../../../assets/img/bg.png')}
                 style={{
-                  width: '100%',
-                  height: 300,
+                  width: '50%',
+                  height: 100,
                   resizeMode: 'contain',
                   margin: 30,
                 }}
-              />
+              /> */}
             </View>
             <View style={styles.SectionStyle}>
               <TextInput
@@ -147,7 +142,7 @@ const LoginScreen = ({navigation}) => {
             </TouchableOpacity>
             <Text
               style={styles.registerTextStyle}
-              onPress={() => navigation.navigate('RegisterScreen')}>
+              onPress={() => navigation.navigate('Registra tu Negocio')}>
               New Here ? Register
             </Text>
           </KeyboardAvoidingView>
@@ -156,7 +151,7 @@ const LoginScreen = ({navigation}) => {
     </View>
   );
 };
-export default LoginScreen;
+export default Rlogin;
 
 const styles = StyleSheet.create({
   mainBody: {
@@ -174,7 +169,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonStyle: {
-    backgroundColor: '#C9B6E4',
+    backgroundColor: '#EEB76B',
     borderWidth: 0,
     color: '#FFFFFF',
     borderColor: '#7DE24E',

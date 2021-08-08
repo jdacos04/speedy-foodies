@@ -13,6 +13,12 @@ import HomeScreen from './DrawerScreens/HomeScreen';
 import SettingsScreen from './DrawerScreens/SettingScreen';
 import CustomSidebarMenu from './Components/CustomSidebarMenu';
 import NavigationDrawerHeader from './Components/NavigationDrawerHeader';
+import Perfil from './Users/Perfil'
+import Editperfil from './Users/Editperfil';
+import Recargasaldo from './Users/Recargasaldo';
+import Menu from './Restaurants/Menus/Menu'
+import Rlogin from './Restaurants/Auth/Rlogin';
+import Rregister from './Restaurants/Auth/Rregister';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,7 +35,7 @@ const homeScreenStack = ({navigation}) => {
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
+            backgroundColor: '#EEB76B', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -50,7 +56,7 @@ const settingScreenStack = ({navigation}) => {
           <NavigationDrawerHeader navigationProps={navigation} />
         ),
         headerStyle: {
-          backgroundColor: '#307ecc', //Set Header color
+          backgroundColor: '#EEB76B', //Set Header color
         },
         headerTintColor: '#fff', //Set Header text color
         headerTitleStyle: {
@@ -67,6 +73,87 @@ const settingScreenStack = ({navigation}) => {
     </Stack.Navigator>
   );
 };
+
+
+
+const PerfilStack = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Perfil"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#EEB76B', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="Perfil"
+        component={Perfil}
+        options={{
+          title: 'Perfil', //Set Header Title
+        }}
+      />
+      <Stack.Screen
+        name="Editperfil"
+        component={Editperfil}
+        options={{
+          title: 'Editperfil', //Set Header Title
+        }}
+      />
+      <Stack.Screen
+        name="Recargasaldo"
+        component={Recargasaldo}
+        options={{
+          title: 'Recargasaldo', //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+const AuthRestaurantStack = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Inicia sesion en tu negocio"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#EEB76B', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="Inicia sesion en tu negocio"
+        component={Rlogin}
+        options={{
+          title: 'Inicia sesion en tu negocio', //Set Header Title
+        }}
+      />
+      <Stack.Screen
+        name="Registra tu Negocio"
+        component={Rregister}
+        options={{
+          title: 'Registra tu Negocio', //Set Header Title
+        }}
+      />
+
+    </Stack.Navigator>
+  );
+};
+
+
+
+
 
 const DrawerNavigatorRoutes = (props) => {
   return (
@@ -91,8 +178,20 @@ const DrawerNavigatorRoutes = (props) => {
         options={{drawerLabel: 'Setting Screen'}}
         component={settingScreenStack}
       />
+      <Drawer.Screen
+      name="perfil"
+      options={{drawerLabel: 'perfil'}}
+        component={PerfilStack}
+      />
+      <Drawer.Screen
+        name=" TU Negocio"
+        options={{drawerLabel: 'Tu Negocio'}}
+        component={AuthRestaurantStack}
+      />
+
     </Drawer.Navigator>
   );
 };
+
 
 export default DrawerNavigatorRoutes;
