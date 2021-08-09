@@ -19,6 +19,7 @@ import Recargasaldo from './Users/Recargasaldo';
 import Menu from './Restaurants/Menus/Menu'
 import Rlogin from './Restaurants/Auth/Rlogin';
 import Rregister from './Restaurants/Auth/Rregister';
+import TuCArrito from './DrawerScreens/TuCarrito'
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -75,6 +76,34 @@ const settingScreenStack = ({navigation}) => {
         component={SettingsScreen}
         options={{
           title: 'Settings', //Set Header Title
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
+
+const CarritoStack = ({navigation}) => {
+  return (
+    <Stack.Navigator
+      initialRouteName="Carrito"
+      screenOptions={{
+        headerLeft: () => (
+          <NavigationDrawerHeader navigationProps={navigation} />
+        ),
+        headerStyle: {
+          backgroundColor: '#EEB76B', //Set Header color
+        },
+        headerTintColor: '#fff', //Set Header text color
+        headerTitleStyle: {
+          fontWeight: 'bold', //Set Header text style
+        },
+      }}>
+      <Stack.Screen
+        name="Carrito"
+        component={TuCArrito}
+        options={{
+          title: 'TU Carito', //Set Header Title
         }}
       />
     </Stack.Navigator>
@@ -194,6 +223,11 @@ const DrawerNavigatorRoutes = (props) => {
         name=" TU Negocio"
         options={{drawerLabel: 'Tu Negocio'}}
         component={AuthRestaurantStack}
+      />
+       <Drawer.Screen
+        name="Carrito"
+        options={{drawerLabel: 'Tu Carrito'}}
+        component={CarritoStack}
       />
 
     </Drawer.Navigator>

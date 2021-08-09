@@ -1,231 +1,211 @@
-
-import React, {useState, createRef} from 'react';
+import React from 'react';
 import {
-  StyleSheet,
-  TextInput,
   View,
   Text,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
+  StyleSheet,
   TouchableOpacity,
-  ScrollView,
+  Image,
+  StatusBar,
 } from 'react-native';
+import { CreditCardInput } from "react-native-credit-card-input";
+const STRIPE_PUBLISHABLE_KEY = "pk_test_51JMdosBymZ1zLV9wrRlmpEjnj9pcs5kMO50yyuNTK5JGZoKg4GbJElmHXSHfoktvHvD1zopFTXeEBQvahOLsii9000L48lgjUb";
+const Secret_key = "sk_test_51JMdosBymZ1zLV9wDNRwD6l5WOSODsA1V0QTbIPWDnklQWytGGa0HXk52XDCfOdPnyKng5LrgGeQkoxbqXfbS2I500chsOUhb7"
+const CURRENCY = 'USD';
+var CARD_TOKEN = null;
 
 
-
-const Recargasaldo = (props)=>{
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userAge, setUserAge] = useState('');
-  const [userAddress, setUserAddress] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errortext, setErrortext] = useState('');
-  const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
-
-  const nameInputRef = createRef();
-  const emailInputRef = createRef();
-  const ageInputRef = createRef();
-  const addressInputRef = createRef();
-
-  const handleSubmitButton = () => {
-    setErrortext('');
-    if (!userName) {
-      alert('Please fill Name');
-      return;
-    }
-    if (!userEmail) {
-      alert('Please fill Email');
-      return;
-    }
-    if (!userAge) {
-      alert('Please fill Age');
-      return;
-    }
-    if (!userAddress) {
-      alert('Please fill Address');
-      return;
-    }
-    //Show Loader
-    setLoading(true);
-    var dataToSend = {
-      name: userName,
-      email: userEmail,
-      age: userAge,
-      password: userAddress,
-    };
-    var formBody = [];
-    for (var key in dataToSend) {
-      var encodedKey = encodeURIComponent(key);
-      var encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
-
-    fetch('http://192.168.1.108:4000/signup', {
-      method: 'POST',
-      body: formBody,
-      headers: {
-        //Header Defination
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //Hide Loader
-        setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status == "SUCCESS") {
-          setIsRegistraionSuccess(true);
-          console.log('Registration Successful. Please Login to proceed');
-        } else {
-          setErrortext('Registration Unsuccessful');
-        }
-      })
-      .catch((error) => {
-        //Hide Loader
-        setLoading(false);
-        console.error(error);
-      });
+function getCreditCardToken(creditCardData){
+  // alert()
+  const card = {
+    'card[number]': creditCardData.values.number.replace(/ /g, ''),
+    'card[exp_month]': creditCardData.values.expiry.split('/')[0],
+    'card[exp_year]': creditCardData.values.expiry.split('/')[1],
+    'card[cvc]': creditCardData.values.cvc
   };
-return(
- 
-  <View style={{flex: 1, backgroundColor: '#307ecc'}}>
-  
-  <ScrollView
-    keyboardShouldPersistTaps="handled"
-    contentContainerStyle={{
-      justifyContent: 'center',
-      alignContent: 'center',
-    }}>
-    <View style={{alignItems: 'center'}}>
-     
-    </View>
-    <KeyboardAvoidingView enabled>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserName) => setUserName(UserName)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Name"
-          placeholderTextColor="#8b9cb5"
-          autoCapitalize="sentences"
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            emailInputRef.current && emailInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Email"
-          placeholderTextColor="#8b9cb5"
-          keyboardType="email-address"
-          ref={emailInputRef}
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            ageInputRef.current && ageInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserAge) => setUserAge(UserAge)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Age"
-          placeholderTextColor="#8b9cb5"
-          keyboardType="numeric"
-          ref={ageInputRef}
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            addressInputRef.current && addressInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserAddress) => setUserAddress(UserAddress)}
-          underlineColorAndroid="#f000"
-          placeholder="password"
-          placeholderTextColor="#8b9cb5"
-          autoCapitalize="sentences"
-          ref={addressInputRef}
-          returnKeyType="next"
-          onSubmitEditing={Keyboard.dismiss}
-          blurOnSubmit={false}
-        />
-      </View>
-      {errortext != '' ? (
-        <Text style={styles.errorTextStyle}> {errortext} </Text>
-      ) : null}
-      <TouchableOpacity
-        style={styles.buttonStyle}
-        activeOpacity={0.5}
-        onPress={handleSubmitButton}>
-        <Text style={styles.buttonTextStyle}>REGISTER</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
-  </ScrollView>
-</View>
+  return fetch('https://api.stripe.com/v1/tokens', {
+    headers: {
+      
+      Accept: 'application/json',
+    
+      'Content-Type': 'application/x-www-form-urlencoded',
 
-    )
+      Authorization: `Bearer ${STRIPE_PUBLISHABLE_KEY}`
+    },
+    
+    method: 'post',
+    
+    body: Object.keys(card)
+      .map(key => key + '=' + card[key])
+      .join('&')
+  }).
+  then(response => response.json())
+  .catch((error)=>console.log(error))
 };
-export default Recargasaldo;
-const styles = StyleSheet.create({
-    SectionStyle: {
-      flexDirection: 'row',
-      height: 40,
-      marginTop: 20,
-      marginLeft: 35,
-      marginRight: 35,
-      margin: 10,
-    },
-    buttonStyle: {
-      backgroundColor: '#7DE24E',
-      borderWidth: 0,
-      color: '#FFFFFF',
-      borderColor: '#7DE24E',
-      height: 40,
-      alignItems: 'center',
-      borderRadius: 30,
-      marginLeft: 35,
-      marginRight: 35,
-      marginTop: 20,
-      marginBottom: 20,
-    },
-    buttonTextStyle: {
-      color: '#FFFFFF',
-      paddingVertical: 10,
-      fontSize: 16,
-    },
-    inputStyle: {
-      flex: 1,
-      color: 'white',
-      paddingLeft: 15,
-      paddingRight: 15,
-      borderWidth: 1,
-      borderRadius: 30,
-      borderColor: '#dadae8',
-    },
-    errorTextStyle: {
-      color: 'red',
-      textAlign: 'center',
-      fontSize: 14,
-    },
-    successTextStyle: {
-      color: 'white',
-      textAlign: 'center',
-      fontSize: 18,
-      padding: 30,
-    },
+/**
+ * The method imitates a request to our server.
+ *
+ * @param creditCardToken
+ * @return {Promise<Response>}
+ */
+ function subscribeUser(creditCardToken){
+  return new Promise((resolve) => {
+    console.log('Credit card token\n', creditCardToken);
+    CARD_TOKEN = creditCardToken.id;
+    setTimeout(() => {
+      resolve({ status: true });
+    }, 1000);
   });
+};
+
+const Recargasaldo= () => {
+
+
+  const [CardInput, setCardInput] = React.useState({})
+
+  const onSubmit = async () => {
+
+    if (CardInput.valid == false || typeof CardInput.valid == "undefined") {
+      alert('Invalid Credit Card');
+      return false;
+    }
+
+    let creditCardToken;
+    try {
+      
+      creditCardToken = await getCreditCardToken(CardInput);
+      // console.log("creditCardToken", creditCardToken)
+      if (creditCardToken.error) {
+        alert("creditCardToken error");
+        return;
+      }
+    } catch (e) {
+      console.log("e",e);
+      return;
+    }
+    
+    const { error } = await subscribeUser(creditCardToken);
+ 
+    if (error) {
+      alert(error)
+    } else {
+     
+      let pament_data = await charges();
+      console.log('pament_data', pament_data);
+      if(pament_data.status == 'succeeded')
+      {
+        alert("Payment Successfully");
+      }
+      else{
+        alert('Payment failed');
+      }
+    }
+  };
+
+
+
+  const charges = async () => {
+
+    const card = {
+        'amount': 50, 
+        'currency': CURRENCY,
+        'source': CARD_TOKEN,
+        'description': "Developers Sin Subscription"
+      };
+
+      return fetch('https://api.stripe.com/v1/charges', {
+        headers: {
+          
+          Accept: 'application/json',
+         
+          'Content-Type': 'application/x-www-form-urlencoded',
+         
+          Authorization: `Bearer ${Secret_key}`
+        },
+    
+        method: 'post',
+        
+        body: Object.keys(card)
+          .map(key => key + '=' + card[key])
+          .join('&')
+      }).then(response => response.json());
+  };
+  
+
+
+  const _onChange =(data) => {
+    setCardInput(data)
+  }
+
+  return (
+    <View style={styles.container}>
+        <StatusBar barStyle="light-content" backgroundColor="#2471A3" />
+        <Image 
+        source={{uri:'https://upload.wikimedia.org/wikipedia/en/thumb/e/eb/Stripe_logo%2C_revised_2016.png/1200px-Stripe_logo%2C_revised_2016.png'}}
+        style={styles.ImgStyle}
+        />
+        <CreditCardInput 
+        inputContainerStyle={styles.inputContainerStyle}
+        inputStyle={styles.inputStyle}
+        labelStyle={styles.labelStyle}
+        validColor="#fff"
+        placeholderColor="#ccc"
+        onChange={_onChange} />
+
+      <TouchableOpacity 
+      onPress={onSubmit}
+      style={styles.button}>
+        <Text
+          style={styles.buttonText}>
+          Pay Now
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    
+  },
+  ImgStyle: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'contain',
+    borderRadius: 8,
+  },
+  button : {
+    backgroundColor:'#2471A3',
+    width:150,
+    height:45,
+    alignSelf:'center',
+    justifyContent:'center',
+    alignItems:'center',
+    marginTop:20,
+    borderRadius:5
+  },
+  buttonText : {
+    fontSize: 15,
+    color: '#f4f4f4',
+    fontWeight:'bold',
+    textTransform:'uppercase'
+  },
+  inputContainerStyle : {
+    backgroundColor:'#fff',
+    borderRadius:5
+  },
+  inputStyle : {
+    backgroundColor:'#222242',
+    paddingLeft:15,
+    borderRadius:5,
+    color:'#fff'
+  },
+  labelStyle : {
+    marginBottom:5,
+    fontSize:12
+  }
+ 
+});
+
+export default Recargasaldo;
   

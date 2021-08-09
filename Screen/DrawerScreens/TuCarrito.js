@@ -2,10 +2,48 @@
 // https://aboutreact.com/react-native-login-and-signup/
 
 // Import React and Component
-import React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {View, Text, SafeAreaView} from 'react-native';
+import React, { useEffect, useState } from "react";
+import { addCard } from '../../api';
+import Mapita from '../Components/Mapita'
 
-const SettingsScreen = () => {
+const TuCarrito = () => {
+ 
+const [carro,setCarro]=useState({
+  id_local:"",
+  id_item:"",
+  id_user:"",
+
+})
+
+useEffect(() => {
+  
+}, [])
+
+
+const handleSubmit= async ()=>{
+
+try {
+  
+} catch (error) {
+console.log(error)  
+}
+
+const handleChange = (name, value) => setPro({ ...pro, [name]: value })
+
+
+const addCard= async(item_id)=>{
+   handleChange('id_item',item_id)
+   const marcos =await AsyncStorage.getItem('user_id')
+   handleChange('id_user',marcos)
+   const negocio=getLocalByItem()
+   handleChange('id_local',negocio)
+
+}
+}
+
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={{flex: 1, padding: 16}}>
@@ -24,27 +62,21 @@ const SettingsScreen = () => {
             Proximamente
             {'\n\n'}
             Carrito de compras con mapa 
+            
           </Text>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: 'center',
-            color: 'grey',
-          }}>
-     
-        </Text>
+        <Mapita></Mapita>
         <Text
           style={{
             fontSize: 16,
             textAlign: 'center',
             color: 'grey',
           }}>
-          
+          se ve el mapita XD
         </Text>
       </View>
     </SafeAreaView>
   );
 };
 
-export default SettingsScreen;
+export default TuCarrito;

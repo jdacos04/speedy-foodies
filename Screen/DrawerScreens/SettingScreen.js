@@ -3,48 +3,63 @@
 
 // Import React and Component
 import React from 'react';
-import {View, Text, SafeAreaView} from 'react-native';
+import {View,Image, Text,ScrollView, SafeAreaView} from 'react-native';
 
 const SettingsScreen = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1, padding: 16}}>
-        <View
-          style={{
-            flex: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Text
+      <ScrollView>
+      <View>
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/hpEfWyx4W2dGU4kPbz/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/9DgxhWOxHDHtF8bvwl/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/Z9WQLSrsQKH3uBbiXq/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/2pGvpSk1wEooM/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/YnkMcHgNIMW4Yfmjxr/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/DKCNQcgbdekrC/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/joYf3Ba2phD15ch9Nt/giphy.gif',
+        }} />
+        <Image style={{  width: 400, height: 300,}} source={{
+          uri:
+            'https://media.giphy.com/media/uTAFTGP3B4QvUoOikX/giphy.gif',
+        }} />
+      </View>
+      </ScrollView>
+          <Text 
             style={{
               fontSize: 20,
               textAlign: 'center',
               marginBottom: 16,
             }}>
-            memes 
-            {'\n\n'}
-            Proximammente
+            Memescitos para bajar el estres
           </Text>
-        </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: 'center',
-            color: 'grey',
-          }}>
-     
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: 'center',
-            color: 'grey',
-          }}>
-          
-        </Text>
-      </View>
+        
     </SafeAreaView>
   );
 };
+
 
 export default SettingsScreen;

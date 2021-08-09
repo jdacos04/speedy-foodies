@@ -41,9 +41,8 @@ const onRefresh = React.useCallback(async () => {
       },
       {
         text: "SI",
-        onPress: async () => {
-          await addCard(id);
-         navigation.navigate('TuCarrito')
+        onPress: async () => {()=>navigation.navigate('TuCarrito')
+         await addCard(id);
         },
       },
     ]);
