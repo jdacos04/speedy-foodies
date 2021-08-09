@@ -46,8 +46,9 @@ const Rlogin = ({navigation}) => {
       formBody.push(encodedKey + '=' + encodedValue);
     }
     formBody = formBody.join('&');
-
-    fetch('http://192.168.1.108:4000/signin', {
+    //'https://api-berserk.herokuapp.com/negocio/signin'
+    //'http://192.168.1.108:4000/negocio/signin'
+    fetch('https://api-berserk.herokuapp.com/negocio/signin', {
       method: 'POST',
       body: formBody,
       headers: {

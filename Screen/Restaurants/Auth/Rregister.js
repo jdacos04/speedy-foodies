@@ -58,8 +58,9 @@ const Rregister = (props) => {
       formBody.push(encodedKey + '=' + encodedValue);
     }
     formBody = formBody.join('&');
-
-    fetch('http://192.168.1.108:4000/negocio/signup', {
+    //'https://api-berserk.herokuapp.com/negocio/signup'
+    //'http://192.168.1.108:4000/negocio/signup'
+    fetch('https://api-berserk.herokuapp.com/negocio/signup', {
       method: 'POST',
       body: formBody,
       headers: {

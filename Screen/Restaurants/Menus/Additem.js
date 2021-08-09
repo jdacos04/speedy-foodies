@@ -1,216 +1,130 @@
-import React, {useState, createRef} from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Image,
-  KeyboardAvoidingView,
-  Keyboard,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
+import { TextInput, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { savePro, updatePro } from "../../../api";
+import Layout from "../../Components/Layout";
 
-const Additem=(prop)=>{
-  const [userName, setUserName] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userAge, setUserAge] = useState('');
-  const [userAddress, setUserAddress] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [errortext, setErrortext] = useState('');
-  const [isRegistraionSuccess, setIsRegistraionSuccess] = useState(false);
 
-  const nameInputRef = createRef();
-  const emailInputRef = createRef();
-  const ageInputRef = createRef();
-  const addressInputRef = createRef();
 
-  const handleSubmitButton = () => {
-    setErrortext('');
-    if (!userName) {
-      alert('Please fill Name');
-      return;
-    }
-    if (!userEmail) {
-      alert('Please fill Email');
-      return;
-    }
-    if (!userAge) {
-      alert('Please fill Age');
-      return;
-    }
-    if (!userAddress) {
-      alert('Please fill Address');
-      return;
-    }
-    //Show Loader
-    setLoading(true);
-    var dataToSend = {
-      nombre: userName,
-      descripcion: userEmail,
-      precio: userAge,
-      id: userAddress,
-    };
-    var formBody = [];
-    for (var key in dataToSend) {
-      var encodedKey = encodeURIComponent(key);
-      var encodedValue = encodeURIComponent(dataToSend[key]);
-      formBody.push(encodedKey + '=' + encodedValue);
-    }
-    formBody = formBody.join('&');
+const Additem =({navigator,route})=>{
+const [pro, setPro]=useState({
+  des:"",
+  nombre:"",
+  precio:"",
+  local:""
+})
 
-    fetch('http://192.168.1.108:4000/productos', {
-      method: 'POST',
-      body: formBody,
-      headers: {
-        //Header Defination
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //Hide Loader
-        setLoading(false);
-        console.log(responseJson);
-        // If server response message same as Data Matched
-        if (responseJson.status == "SUCCESS") {
-          setIsRegistraionSuccess(true);
-          console.log('Registration Successful. Please Login to proceed');
-        } else {
-          setErrortext('Registration Unsuccessful');
-        }
-      })
-      .catch((error) => {
-        //Hide Loader
-        setLoading(false);
-        console.error(error);
-      });
-  };
-return(
- 
-  <View style={{flex: 1, backgroundColor: '#307ecc'}}>
+const [editing, setEditing] = useState(false);
+
+useEffect(() => {
+  help()
+    
+}, []);
+
+
+
+
+
+
+const handleSubmit = async () => {
+  try {
+    if (!editing) {
+      await savePro(pro);
+    } else {
+      console.log(route.params.id, pro)
+      await updatePro(route.params.id, {...pro});
+    }
+    navigator.navigate("Menu");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleChange = (name, value) => setPro({ ...pro, [name]: value })
+
+const help =async()=>{
+  const marcos=await AsyncStorage.getItem('local_id')
+  console.log(parseInt(marcos))
+  handleChange("local", marcos)
   
-  <ScrollView
-    keyboardShouldPersistTaps="handled"
-    contentContainerStyle={{
-      justifyContent: 'center',
-      alignContent: 'center',
-    }}>
-    <View style={{alignItems: 'center'}}>
-     
-    </View>
-    <KeyboardAvoidingView enabled>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserName) => setUserName(UserName)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Name"
-          placeholderTextColor="#8b9cb5"
-          autoCapitalize="sentences"
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            emailInputRef.current && emailInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserEmail) => setUserEmail(UserEmail)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Email"
-          placeholderTextColor="#8b9cb5"
-          keyboardType="email-address"
-          ref={emailInputRef}
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            ageInputRef.current && ageInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-      <View style={styles.SectionStyle}>
-        <TextInput
-          style={styles.inputStyle}
-          onChangeText={(UserAge) => setUserAge(UserAge)}
-          underlineColorAndroid="#f000"
-          placeholder="Enter Age"
-          placeholderTextColor="#8b9cb5"
-          keyboardType="numeric"
-          ref={ageInputRef}
-          returnKeyType="next"
-          onSubmitEditing={() =>
-            addressInputRef.current && addressInputRef.current.focus()
-          }
-          blurOnSubmit={false}
-        />
-      </View>
-  
-      {errortext != '' ? (
-        <Text style={styles.errorTextStyle}> {errortext} </Text>
-      ) : null}
-      <TouchableOpacity
-        style={styles.buttonStyle}
-        activeOpacity={0.5}
-        onPress={handleSubmitButton}>
-        <Text style={styles.buttonTextStyle}>REGISTER</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
-  </ScrollView>
-</View>
-
-)
 }
 
-export default  Additem;
+
+return(
+  <Layout>
+  <TextInput
+    style={styles.input}
+    placeholder="insertar  nombre"
+    placeholderTextColor="#576574"
+    value={pro.title}
+    onChangeText={(text) => handleChange("nombre", text)}
+  />
+
+  <TextInput
+    style={styles.input}
+    placeholder="insertar descripcion "
+    placeholderTextColor="#576574"
+    value={pro.description}
+    onChangeText={(text) => handleChange("des", text)}
+  />
+  <TextInput
+    style={styles.input}
+    placeholder="insertar precio "
+    placeholderTextColor="#576574"
+    value={pro.description}
+    onChangeText={(text) => handleChange("precio", text)}
+  />
+
+
+  {!editing ? (
+    <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit}>
+      <Text style={styles.buttonText}>guardar Porducto</Text>
+    </TouchableOpacity>
+  ) : (
+    <TouchableOpacity style={styles.buttonUpdate} onPress={handleSubmit}>
+      <Text style={styles.buttonText}>Actualizar porducto</Text>
+    </TouchableOpacity>
+  )}
+</Layout>
+)
+
+
+
+}
+
+export default Additem
 
 const styles = StyleSheet.create({
-  SectionStyle: {
-    flexDirection: 'row',
-    height: 40,
-    marginTop: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    margin: 10,
-  },
-  buttonStyle: {
-    backgroundColor: '#7DE24E',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#7DE24E',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
-  },
-  inputStyle: {
-    flex: 1,
-    color: 'white',
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderWidth: 1,
-    borderRadius: 30,
-    borderColor: '#dadae8',
-  },
-  errorTextStyle: {
-    color: 'red',
-    textAlign: 'center',
+  input: {
+    width: "90%",
+    marginBottom: 7,
     fontSize: 14,
+    borderWidth: 1,
+    borderColor: "#10ac84",
+    height: 30,
+    color: "#ffffff",
+    textAlign: "center",
+    padding: 4,
+    borderRadius: 5,
   },
-  successTextStyle: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 18,
-    padding: 30,
+  buttonSave: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 5,
+    marginBottom: 3,
+    backgroundColor: "#10ac84",
+    width: "90%",
+  },
+  buttonUpdate: {
+    paddingTop: 10,
+    paddingBottom: 10,
+    borderRadius: 5,
+    marginBottom: 3,
+    backgroundColor: "#e58e26",
+    width: "90%",
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
   },
 });

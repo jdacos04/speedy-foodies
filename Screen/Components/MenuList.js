@@ -2,22 +2,22 @@ import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, Alert, RefreshControl } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import ProCard from './ProCard'                  
-import { getAllPro,addCard } from "../../api";
+import { getAllPro,addCard,getProID } from "../../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 
 
-const ListaP =({navigation})=>{
+
+const MenuLista =({navigation})=>{
 const [pro,setPro] =useState([]);
 const [refreshing, setRefreshing] = React.useState(false);
 const isFocused = useIsFocused();
 
 
-
 const getList= async() =>{
     try{
-    const pro = await getAllPro();
+    const marcos=await AsyncStorage.getItem('local_id')
+    const pro = await getProID(marcos);
     setPro(pro);
     }catch(e){
         console.log(e);
@@ -42,8 +42,8 @@ const onRefresh = React.useCallback(async () => {
       {
         text: "SI",
         onPress: async () => {
-          await addCard(id);
-         navigation.navigate('TuCarrito')
+         
+          
         },
       },
     ]);
@@ -52,14 +52,18 @@ const onRefresh = React.useCallback(async () => {
  useEffect(()=>{
      getList();
      
+     
      console.log("se muuestra la lista");
  },[isFocused]);
 
  const renderItem = ({ item }) => (
     <ProCard pro={item} handleAdd={handleAdd} />
 
+    
+
   );
 
+  
 return(
     <SafeAreaView style={{ flex: 1, width: "90%" }}>
     <FlatList
@@ -86,4 +90,4 @@ return(
 
 
 }
-export default ListaP
+export default MenuLista

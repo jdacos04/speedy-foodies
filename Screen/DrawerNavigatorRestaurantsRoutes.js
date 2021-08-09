@@ -23,7 +23,7 @@ const RestaurasnStack = ({navigation}) => {
             <NavigationDrawerHeader navigationProps={navigation} />
           ),
           headerStyle: {
-            backgroundColor: '#307ecc', //Set Header color
+            backgroundColor: '#EEB76B', //Set Header color
           },
           headerTintColor: '#fff', //Set Header text color
           headerTitleStyle: {
@@ -113,7 +113,7 @@ const RestaurasnStack = ({navigation}) => {
         <Drawer.Screen
           name="Restaurat"
           options={{drawerLabel: 'restaurant'}}
-          component={Menu}
+          component={RestaurasnStack}
         />
         <Drawer.Screen
           name="Agregar Producto"
@@ -122,7 +122,7 @@ const RestaurasnStack = ({navigation}) => {
         />
         <Drawer.Screen
           name="Actualizar Producto"
-          options={{drawerLabel: 'AActualizar  Producto'}}
+          options={{drawerLabel: 'Actualizar  Producto'}}
           component={UpdateitemStack}
         />
   

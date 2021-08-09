@@ -43,6 +43,13 @@ const homeScreenStack = ({navigation}) => {
           },
         }}
       />
+      <Stack.Screen
+        name="Local"
+        component={Menu}
+        options={{
+          title: 'Local', //Set Header Title
+        }}
+      />
     </Stack.Navigator>
   );
 };

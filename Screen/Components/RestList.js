@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, SafeAreaView, Alert, RefreshControl } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import ProCard from './ProCard'                  
-import { getAllPro,addCard } from "../../api";
+import RestCard from './RestCard'                  
+import { getAllPro,getAllResta} from "../../api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useNavigation } from "@react-navigation/native";
 
 
 
-const ListaP =({navigation})=>{
-const [pro,setPro] =useState([]);
+const RestList =({navigation})=>{
+const [resta,setResta] =useState([]);
 const [refreshing, setRefreshing] = React.useState(false);
 const isFocused = useIsFocused();
 
 
-
 const getList= async() =>{
     try{
-    const pro = await getAllPro();
-    setPro(pro);
+    const resta = await getAllResta();
+    setResta(resta);
     }catch(e){
         console.log(e);
     } 
@@ -33,21 +31,7 @@ const onRefresh = React.useCallback(async () => {
   }, []);
 
 
-  const handleAdd = (id) => {
-    Alert.alert("seguro que lo quiere anadir ", "estas seguro?", [
-      {
-        text: "NO",
-        style: "cancel",
-      },
-      {
-        text: "SI",
-        onPress: async () => {
-          await addCard(id);
-         navigation.navigate('TuCarrito')
-        },
-      },
-    ]);
-  };
+  
 
  useEffect(()=>{
      getList();
@@ -56,16 +40,16 @@ const onRefresh = React.useCallback(async () => {
  },[isFocused]);
 
  const renderItem = ({ item }) => (
-    <ProCard pro={item} handleAdd={handleAdd} />
+    <RestCard resta={item}  />
 
   );
 
 return(
     <SafeAreaView style={{ flex: 1, width: "90%" }}>
     <FlatList
-      data={pro}
+      data={resta}
       renderItem={renderItem}
-      keyExtractor={(item) => toString(item.id_item)}
+      keyExtractor={(item) => item.id_local.toString()}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}
@@ -86,4 +70,4 @@ return(
 
 
 }
-export default ListaP
+export default RestList

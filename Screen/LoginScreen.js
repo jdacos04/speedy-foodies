@@ -46,7 +46,7 @@ const LoginScreen = ({navigation}) => {
       formBody.push(encodedKey + '=' + encodedValue);
     }
     formBody = formBody.join('&');
-
+      //'http://192.168.1.108:4000/signin'
     fetch('https://api-berserk.herokuapp.com/signin',{
       method: 'POST',
       body: formBody,
@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}) => {
         console.log(responseJson);
         // If server response message same as Data Matched
         if (responseJson.status == "SUCCESS") {
-          const i=toString(responseJson.data)
+          const i=responseJson.data.toString()
           await AsyncStorage.setItem('user_id',i)
           const u = await AsyncStorage.getItem('user_id')
           console.log(parseInt(u))
